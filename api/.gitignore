@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.egg
+*.sqlite3
+*.db
+
+# Virtual environments
+.venv/
+venv/
+.env
+.env.*
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Caches
+.cache/
+.mypy_cache/
+.pyre/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Modal / model cache / temp
+modal_*/
+modal.log
+/models/
+hf-hub-cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# AWS credentials (local, user-level - ignore if accidentally committed)
+.aws/credentials
