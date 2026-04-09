@@ -1,0 +1,18 @@
+services:
+   postgres: 
+    image: postgres:16.2 
+    container_name: img_gen_postgres 
+    environment: 
+        POSTGRES_USER: postgres 
+        POSTGRES_PASSWORD: admin
+        POSTGRES_DB: img_gen_db 
+    volumes: 
+        - img_gen_db_data:/var/lib/postgresql/data
+    ports: 
+        - "5432:5432"
+    restart: "unless-stopped"
+
+volumes:
+   img_gen_db_data:
+
+
