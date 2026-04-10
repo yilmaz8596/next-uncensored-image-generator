@@ -14,6 +14,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DemoSection from "../components/demo-section";
+import {
+  FadeUp,
+  HeroHeading,
+  ScaleIn,
+  StaggerContainer,
+  StaggerItem,
+} from "~/components/motion";
 
 export default function HomePage() {
   const features = [
@@ -140,26 +147,28 @@ export default function HomePage() {
       <section className="relative overflow-hidden py-20 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/30 px-4 py-2 text-sm">
+            <ScaleIn delay={0.1} className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/30 px-4 py-2 text-sm">
               <Sparkles className="h-4 w-4 text-chart-1" />
               <span className="font-medium text-foreground">
                 Powered by Advanced AI
               </span>
-            </div>
+            </ScaleIn>
 
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+            <HeroHeading className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
               Turn Text into{" "}
               <span style={{ background: "linear-gradient(to right, var(--chart-1), var(--chart-2))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                 Images
               </span>
-            </h1>
+            </HeroHeading>
 
-            <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-              Create high-quality images from text prompts in seconds. Iterate
-              quickly, save your generations, and build your library.
-            </p>
+            <FadeUp delay={0.25}>
+              <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+                Create high-quality images from text prompts in seconds. Iterate
+                quickly, save your generations, and build your library.
+              </p>
+            </FadeUp>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <FadeUp delay={0.4} className="flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Link href="/dashboard">
                 <Button
                   size="lg"
@@ -179,35 +188,35 @@ export default function HomePage() {
                   See Examples
                 </Button>
               </Link>
-            </div>
+            </FadeUp>
 
-            <div className="mt-16 text-center">
+            <FadeUp delay={0.55} className="mt-16 text-center">
               <p className="mb-8 text-sm text-muted-foreground">
                 Trusted by thousands of creators worldwide
               </p>
-              <div className="grid grid-cols-2 items-center justify-center gap-6 opacity-80 sm:grid-cols-5">
-                <div className="text-center">
+              <StaggerContainer className="grid grid-cols-2 items-center justify-center gap-6 opacity-80 sm:grid-cols-5" staggerDelay={0.08}>
+                <StaggerItem className="text-center">
                   <div className="text-2xl font-bold text-foreground">50K+</div>
                   <div className="text-xs text-muted-foreground">Images Generated</div>
-                </div>
-                <div className="text-center">
+                </StaggerItem>
+                <StaggerItem className="text-center">
                   <div className="text-2xl font-bold text-foreground">5K+</div>
                   <div className="text-xs text-muted-foreground">Active Users</div>
-                </div>
-                <div className="text-center">
+                </StaggerItem>
+                <StaggerItem className="text-center">
                   <div className="text-2xl font-bold text-foreground">99.9%</div>
                   <div className="text-xs text-muted-foreground">Uptime</div>
-                </div>
-                <div className="text-center">
+                </StaggerItem>
+                <StaggerItem className="text-center">
                   <div className="text-2xl font-bold text-chart-4">4.8★</div>
                   <div className="text-xs text-muted-foreground">User Rating</div>
-                </div>
-                <div className="col-span-2 text-center sm:col-span-1">
+                </StaggerItem>
+                <StaggerItem className="col-span-2 text-center sm:col-span-1">
                   <div className="text-2xl font-bold text-foreground">24/7</div>
                   <div className="text-xs text-muted-foreground">Image Generation</div>
-                </div>
-              </div>
-            </div>
+                </StaggerItem>
+              </StaggerContainer>
+            </FadeUp>
           </div>
         </div>
       </section>
@@ -218,7 +227,7 @@ export default function HomePage() {
       {/* Features Section */}
       <section id="features" className="bg-card py-20 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <FadeUp className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Powerful AI Images at Your{" "}
               <span style={{ background: "linear-gradient(to right, var(--chart-1), var(--chart-2))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
@@ -229,47 +238,46 @@ export default function HomePage() {
               Everything you need to create images with the power of artificial
               intelligence
             </p>
-          </div>
+          </FadeUp>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <StaggerContainer className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.1}>
             {features.map((feature, index) => (
-              <Card
-                key={index}
-                className="group relative overflow-hidden border-border bg-card/70 backdrop-blur-sm transition-all hover:shadow-lg"
-              >
-                <CardContent className="p-6">
-                  <div
-                    className={`${feature.bgColor} mb-4 inline-flex items-center justify-center rounded-lg p-3 ${feature.color}`}
-                  >
-                    {feature.icon}
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold text-card-foreground">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </CardContent>
-                <div className="absolute inset-0 bg-linear-to-r from-primary/0 to-primary/10 opacity-0 transition-opacity group-hover:opacity-100" />
-              </Card>
+              <StaggerItem key={index}>
+                <Card className="group relative overflow-hidden border-border bg-card/70 backdrop-blur-sm transition-all hover:shadow-lg hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div
+                      className={`${feature.bgColor} mb-4 inline-flex items-center justify-center rounded-lg p-3 ${feature.color}`}
+                    >
+                      {feature.icon}
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold text-card-foreground">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                  <div className="absolute inset-0 bg-linear-to-r from-primary/0 to-primary/10 opacity-0 transition-opacity group-hover:opacity-100" />
+                </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* How It Works Section */}
       <section className="bg-muted py-20 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <FadeUp className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Simple. Fast. Professional.
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
               Get professional results in three simple steps
             </p>
-          </div>
+          </FadeUp>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <StaggerContainer className="grid gap-8 md:grid-cols-3" staggerDelay={0.15}>
             {[
               {
                 step: "01",
@@ -290,29 +298,31 @@ export default function HomePage() {
                   "Get your image in seconds. Download or save it to your projects.",
               },
             ].map((item, index) => (
-              <div key={index} className="relative">
-                <div className="mb-4 flex items-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-sm">
-                    {item.step}
+              <StaggerItem key={index}>
+                <div className="relative">
+                  <div className="mb-4 flex items-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-sm">
+                      {item.step}
+                    </div>
+                    {index < 2 && (
+                      <div className="ml-4 hidden h-0.5 w-full bg-border md:block" />
+                    )}
                   </div>
-                  {index < 2 && (
-                    <div className="ml-4 hidden h-0.5 w-full bg-border md:block" />
-                  )}
+                  <h3 className="mb-2 text-xl font-semibold text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground">{item.description}</p>
                 </div>
-                <h3 className="mb-2 text-xl font-semibold text-foreground">
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground">{item.description}</p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* Testimonials Section */}
       <section id="testimonials" className="bg-card py-20 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <FadeUp className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Loved by{" "}
               <span style={{ background: "linear-gradient(to right, var(--chart-1), var(--chart-2))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
@@ -322,40 +332,39 @@ export default function HomePage() {
             <p className="mt-4 text-lg text-muted-foreground">
               See what our users are saying about AI Image Generator
             </p>
-          </div>
+          </FadeUp>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <StaggerContainer className="grid gap-6 md:grid-cols-3" staggerDelay={0.12}>
             {testimonials.map((testimonial, index) => (
-              <Card
-                key={index}
-                className="relative border-border bg-card/70 backdrop-blur-sm"
-              >
-                <CardContent className="p-6">
-                  <div className="mb-4 flex items-center gap-1">
-                    {Array.from({ length: Number(testimonial.rating) }).map(
-                      (_, i) => (
-                        <Star
-                          key={i}
-                          className="h-4 w-4 fill-amber-400 text-amber-400"
-                        />
-                      ),
-                    )}
-                  </div>
-                  <p className="mb-4 text-muted-foreground italic">
-                    &ldquo;{testimonial.content}&rdquo;
-                  </p>
-                  <div>
-                    <div className="font-semibold text-card-foreground">
-                      {testimonial.name}
+              <StaggerItem key={index}>
+                <Card className="relative border-border bg-card/70 backdrop-blur-sm transition-all hover:shadow-lg hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div className="mb-4 flex items-center gap-1">
+                      {Array.from({ length: Number(testimonial.rating) }).map(
+                        (_, i) => (
+                          <Star
+                            key={i}
+                            className="h-4 w-4 fill-amber-400 text-amber-400"
+                          />
+                        ),
+                      )}
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {testimonial.role}
+                    <p className="mb-4 text-muted-foreground italic">
+                      &ldquo;{testimonial.content}&rdquo;
+                    </p>
+                    <div>
+                      <div className="font-semibold text-card-foreground">
+                        {testimonial.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {testimonial.role}
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -365,7 +374,7 @@ export default function HomePage() {
         className="bg-muted py-20 sm:py-32"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <FadeUp className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Start Creating{" "}
               <span style={{ background: "linear-gradient(to right, var(--chart-1), var(--chart-2))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
@@ -375,9 +384,9 @@ export default function HomePage() {
             <p className="mt-4 text-lg text-muted-foreground">
               No credit card required. Start generating images instantly.
             </p>
-          </div>
+          </FadeUp>
 
-          <div className="mx-auto max-w-lg">
+          <FadeUp delay={0.15} className="mx-auto max-w-lg">
             <Card className="relative overflow-hidden border-2 border-primary bg-card/70 backdrop-blur-sm">
               <div className="absolute top-0 right-0 bg-primary px-4 py-1 text-sm font-medium text-primary-foreground">
                 Free to Start
@@ -422,14 +431,14 @@ export default function HomePage() {
                 </p>
               </CardContent>
             </Card>
-          </div>
+          </FadeUp>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="bg-primary/20 py-20 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
+          <FadeUp className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Ready to Transform Your Text?
             </h2>
@@ -458,7 +467,7 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
-          </div>
+          </FadeUp>
         </div>
       </section>
 

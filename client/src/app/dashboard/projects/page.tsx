@@ -18,6 +18,8 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/navigation";
+import DeleteImageModal from "~/components/delete-image-modal";
+import type { GeneratedImage } from "~/components/image-history";
 
 interface ImageProject {
   id: string;
@@ -39,12 +41,30 @@ interface ImageProject {
 
 type SortBy = "newest" | "oldest" | "name";
 
+function toGeneratedImage(p: ImageProject): GeneratedImage {
+  return {
+    id: p.id,
+    s3_key: p.s3Key,
+    imageUrl: p.imageUrl,
+    prompt: p.prompt,
+    negativePrompt: p.negativePrompt,
+    width: p.width,
+    height: p.height,
+    numInferenceSteps: p.numInferenceSteps,
+    guidanceScale: p.guidanceScale,
+    seed: p.seed,
+    modelId: p.modelId,
+    timestamp: new Date(p.createdAt),
+  };
+}
+
 export default function ProjectsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [imageProjects, setImageProjects] = useState<ImageProject[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<ImageProject[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortBy>("newest");
+  const [pendingDelete, setPendingDelete] = useState<GeneratedImage | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -93,14 +113,13 @@ export default function ProjectsPage() {
     setFilteredProjects(filtered);
   }, [imageProjects, searchQuery, sortBy]);
 
-  const handleDelete = async (projectId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!confirm("Are you sure you want to delete this image project?")) return;
-
-    const result = await deleteImageProject(projectId);
+  const handleDeleteConfirm = async (img: GeneratedImage) => {
+    if (!img.id) return;
+    const result = await deleteImageProject(img.id);
     if (result.success) {
-      setImageProjects((prev) => prev.filter((p) => p.id !== projectId));
+      setImageProjects((prev) => prev.filter((p) => p.id !== img.id));
     }
+    setPendingDelete(null);
   };
 
   const handleDownload = (url: string, e: React.MouseEvent) => {
@@ -110,7 +129,7 @@ export default function ProjectsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
+      <div className="flex min-h-100 items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="text-primary h-8 w-8 animate-spin" />
           <p className="text-muted-foreground text-sm">Loading your projects...</p>
@@ -239,8 +258,8 @@ export default function ProjectsPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-destructive h-8 w-8 p-0"
-                        onClick={(e) => handleDelete(project.id, e)}
+                        className="text-destructive hover:bg-destructive/10 h-8 w-8 p-0"
+                        onClick={(e) => { e.stopPropagation(); setPendingDelete(toGeneratedImage(project)); }}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -260,6 +279,12 @@ export default function ProjectsPage() {
             </div>
           )}
         </div>
+
+        <DeleteImageModal
+          image={pendingDelete}
+          onClose={() => setPendingDelete(null)}
+          onConfirm={handleDeleteConfirm}
+        />
       </SignedIn>
     </>
   );

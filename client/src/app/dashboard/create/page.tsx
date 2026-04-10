@@ -1,37 +1,17 @@
-"use client";
+﻿"use client";
 
 import { RedirectToSignIn, SignedIn } from "@daveyplate/better-auth-ui";
-import { Loader2 } from "lucide-react";
-import { authClient } from "~/lib/auth-client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  generateImage as generateImageAction,
-  getUserImageProjects,
-} from "~/actions/text-to-image";
+import { generateImage as generateImageAction } from "~/actions/text-to-image";
 import { toast } from "sonner";
 
 import ImageSettings from "~/components/image-settings";
 import PromptInput from "~/components/prompt-input";
-import ImageHistory from "~/components/image-history";
-
-export interface GeneratedImage {
-  s3_key: string;
-  imageUrl: string;
-  prompt: string;
-  negativePrompt?: string | null;
-  width: number;
-  height: number;
-  numInferenceSteps: number;
-  guidanceScale: number;
-  seed: number;
-  modelId: string;
-  timestamp: Date;
-}
+import type { GeneratedImage } from "~/components/image-history";
 
 export default function CreatePage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [negativePrompt, setNegativePrompt] = useState("");
@@ -40,56 +20,7 @@ export default function CreatePage() {
   const [numInferenceSteps, setNumInferenceSteps] = useState(9);
   const [guidanceScale, setGuidanceScale] = useState(0);
   const [seed, setSeed] = useState("");
-  const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
   const [currentImage, setCurrentImage] = useState<GeneratedImage | null>(null);
-
-  useEffect(() => {
-    const initializeData = async () => {
-      try {
-        const [, projectsResult] = await Promise.all([
-          authClient.getSession(),
-          getUserImageProjects(),
-        ]);
-
-        if (projectsResult.success && projectsResult.imageProjects) {
-          const mappedProjects = (
-            projectsResult.imageProjects as {
-              s3Key: string;
-              imageUrl: string;
-              prompt: string;
-              negativePrompt: string | null;
-              width: number;
-              height: number;
-              numInferenceSteps: number;
-              guidanceScale: number;
-              seed: number;
-              modelId: string;
-              createdAt: string | Date;
-            }[]
-          ).map((project) => ({
-            s3_key: project.s3Key,
-            imageUrl: project.imageUrl,
-            prompt: project.prompt,
-            negativePrompt: project.negativePrompt,
-            width: project.width,
-            height: project.height,
-            numInferenceSteps: project.numInferenceSteps,
-            guidanceScale: project.guidanceScale,
-            seed: project.seed,
-            modelId: project.modelId,
-            timestamp: new Date(project.createdAt),
-          }));
-          setGeneratedImages(mappedProjects);
-        }
-      } catch (error) {
-        console.error("Error initializing data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    void initializeData();
-  }, []);
 
   const generateImage = async () => {
     if (!prompt.trim()) {
@@ -109,8 +40,12 @@ export default function CreatePage() {
         seed: seed.trim() ? parseInt(seed, 10) : undefined,
       });
 
-      if (!result.success || !result.imageUrl || !result.s3_key) {
+      if (!result.success) {
         throw new Error(result.error ?? "Generation failed");
+      }
+
+      if (!result.imageUrl || !result.s3_key) {
+        throw new Error("Generation failed");
       }
 
       router.refresh();
@@ -130,7 +65,6 @@ export default function CreatePage() {
       };
 
       setCurrentImage(newImage);
-      setGeneratedImages([newImage, ...generatedImages].slice(0, 20));
       toast.success("Image generated successfully!");
     } catch (error) {
       console.error("Generation error:", error);
@@ -141,14 +75,6 @@ export default function CreatePage() {
       setIsGenerating(false);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <Loader2 className="text-primary h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -197,14 +123,6 @@ export default function CreatePage() {
                 onDownload={(img) => window.open(img.imageUrl, "_blank")}
               />
             </div>
-          </div>
-
-          {/* History */}
-          <div className="mt-6">
-            <ImageHistory
-              generatedImages={generatedImages}
-              onDownload={(img) => window.open(img.imageUrl, "_blank")}
-            />
           </div>
         </div>
       </SignedIn>

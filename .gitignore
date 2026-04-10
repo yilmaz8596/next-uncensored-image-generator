@@ -30,6 +30,9 @@ pnpm-debug.log*
 # Modal
 modal.log
 
+# Old client git history (renamed from client/.git)
+client/client_git_backup/
+
 # Secrets
 *.pem
 *.key

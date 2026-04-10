@@ -138,13 +138,14 @@ class ZImageServer:
         ).images[0]
 
         # Persist to a temp file and upload to S3.
+        region = os.getenv("AWS_REGION", "eu-north-1")
         key = f"images/{uuid.uuid4()}.png"
         with tempfile.TemporaryDirectory(prefix="zimg_") as d:
             path = os.path.join(d, "out.png")
             img.save(path)
-            s3 = boto3.client("s3")
+            s3 = boto3.client("s3", region_name=region)
             s3.upload_file(path, bucket, key, ExtraArgs={"ContentType": "image/png"})
 
-            url = f"https://{bucket}.s3.amazonaws.com/{key}"
+            url = f"https://{bucket}.s3.{region}.amazonaws.com/{key}"
 
         return {"image_s3_key": key, "image_url": url, "seed": seed, "model_id": MODEL_ID}

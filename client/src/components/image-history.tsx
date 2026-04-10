@@ -1,10 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { Download, Image as ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { Download, Image as ImageIcon, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import DeleteImageModal from "~/components/delete-image-modal";
+import { deleteImageProject } from "~/actions/text-to-image";
 
 export interface GeneratedImage {
+  id?: string;
   s3_key: string;
   imageUrl: string;
   prompt: string;
@@ -21,22 +26,40 @@ export interface GeneratedImage {
 interface ImageHistoryProps {
   generatedImages: GeneratedImage[];
   onDownload: (img: GeneratedImage) => void;
+  onDelete?: (img: GeneratedImage) => void;
 }
 
 export default function ImageHistory({
   generatedImages,
   onDownload,
+  onDelete,
 }: ImageHistoryProps) {
+  const [pendingDelete, setPendingDelete] = useState<GeneratedImage | null>(null);
+
+  const handleDeleteConfirm = async (img: GeneratedImage) => {
+    if (!img.id) {
+      toast.error("Cannot delete: image ID missing");
+      return;
+    }
+    const result = await deleteImageProject(img.id);
+    if (result.success) {
+      toast.success("Image deleted");
+      onDelete?.(img);
+    } else {
+      toast.error(result.error ?? "Failed to delete image");
+    }
+    setPendingDelete(null);
+  };
   return (
-    <div className="border-t border-gray-200 bg-white px-2 py-3 sm:px-4 sm:py-4">
+    <div className="border-t border-border bg-card px-2 py-3 sm:px-4 sm:py-4">
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 text-center">
           <div className="mb-2 inline-flex items-center gap-2">
-            <div className="h-6 w-0.5 rounded-full bg-linear-to-b from-blue-500 to-purple-600"></div>
-            <h2 className="bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-xl font-bold text-transparent">
+            <div className="h-6 w-0.5 rounded-full bg-linear-to-b from-chart-1 to-chart-2"></div>
+            <h2 className="bg-linear-to-r from-foreground to-muted-foreground bg-clip-text text-xl font-bold text-transparent">
               Recent Generations
             </h2>
-            <div className="h-6 w-0.5 rounded-full bg-linear-to-b from-purple-600 to-blue-500"></div>
+            <div className="h-6 w-0.5 rounded-full bg-linear-to-b from-chart-2 to-chart-1"></div>
           </div>
           <p className="text-muted-foreground mx-auto max-w-md text-sm">
             Your image generation history
@@ -48,22 +71,22 @@ export default function ImageHistory({
             {generatedImages.map((img, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-xl border-2 border-gray-200 bg-white p-4 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl"
+                className="group relative overflow-hidden rounded-xl border border-border bg-card/70 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg"
               >
                 <div className="mb-3 flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r from-blue-500 to-purple-600">
-                      <ImageIcon className="h-4 w-4 text-white" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+                      <ImageIcon className="h-4 w-4 text-primary-foreground" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {new Date(img.timestamp).toLocaleTimeString()}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-gray-50">
+                <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-muted">
                   <Image
                     src={img.imageUrl}
                     alt={img.prompt}
@@ -73,7 +96,7 @@ export default function ImageHistory({
                   />
                 </div>
 
-                <p className="mb-3 line-clamp-2 text-xs text-gray-700">
+                <p className="mb-3 line-clamp-2 text-xs text-muted-foreground">
                   {img.prompt}
                 </p>
 
@@ -87,6 +110,14 @@ export default function ImageHistory({
                     <Download className="h-3 w-3" />
                     Open
                   </Button>
+                  <Button
+                    onClick={() => setPendingDelete(img)}
+                    variant="outline"
+                    size="sm"
+                    className="h-7 gap-1 px-2 text-xs text-destructive hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
                 </div>
               </div>
             ))}
@@ -95,15 +126,15 @@ export default function ImageHistory({
           <div className="py-16 text-center">
             <div className="relative mx-auto mb-8">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-32 w-32 animate-pulse rounded-full bg-linear-to-br from-blue-100 to-purple-100"></div>
+                <div className="h-32 w-32 animate-pulse rounded-full bg-primary/10"></div>
               </div>
-              <div className="relative z-10 mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-white shadow-lg">
-                <ImageIcon className="h-10 w-10 text-gray-400" />
+              <div className="relative z-10 mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-dashed border-border bg-card shadow-sm">
+                <ImageIcon className="h-10 w-10 text-muted-foreground" />
               </div>
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-xl font-bold text-gray-900">
+              <h3 className="text-xl font-bold text-foreground">
                 No generations yet
               </h3>
               <p className="text-muted-foreground mx-auto max-w-md text-lg leading-relaxed">
@@ -113,6 +144,12 @@ export default function ImageHistory({
           </div>
         )}
       </div>
+
+      <DeleteImageModal
+        image={pendingDelete}
+        onClose={() => setPendingDelete(null)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }
