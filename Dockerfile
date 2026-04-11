@@ -12,6 +12,11 @@ RUN npx prisma generate
 COPY client/ .
 
 ENV SKIP_ENV_VALIDATION=1
+
+# NEXT_PUBLIC_ vars must be available at build time to be inlined into the JS bundle
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+
 RUN npm run build
 
 # Copy static assets into the standalone output
