@@ -35,7 +35,7 @@ export const auth = betterAuth({
             { productId: "d06706c3-b785-4a89-b7cb-d85620cf5d2e", slug: "pro" },
             { productId: "3d40a70d-cfe9-42a9-8f11-573ae2566fa9", slug: "elite" },
           ],
-          successUrl: "/dashboard/upgrade?success=true&checkoutId={CHECKOUT_ID}",
+          successUrl: `${process.env.BETTER_AUTH_URL?.replace(/\/$/, "")}/dashboard/upgrade?success=true&checkoutId={CHECKOUT_ID}`,
           authenticatedUsersOnly: true,
         }),
         webhooks({
