@@ -34,6 +34,9 @@ jobs:
 
       - name: Generate Prisma client
         run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/dummy
+          SKIP_ENV_VALIDATION: 1
 
       - name: Typecheck
         run: npm run typecheck
