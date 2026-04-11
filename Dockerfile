@@ -14,6 +14,10 @@ COPY client/ .
 ENV SKIP_ENV_VALIDATION=1
 RUN npm run build
 
+# Copy static assets into the standalone output
+RUN cp -r .next/static .next/standalone/.next/static
+RUN cp -r public .next/standalone/public
+
 ENV NODE_ENV=production
 ENV HOSTNAME="0.0.0.0"
 
