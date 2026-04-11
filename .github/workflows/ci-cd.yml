@@ -46,7 +46,7 @@ jobs:
           SKIP_ENV_VALIDATION: 1
 
       - name: Lint
-        run: npx next lint --dir src
+        run: npx eslint src --ext .ts,.tsx
         env:
           SKIP_ENV_VALIDATION: 1
 
