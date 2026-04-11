@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import {cn} from "../lib/utils";
 import { Nunito, Geist_Mono } from "next/font/google";
 import { Providers } from "../components/providers";
-import { Toaster } from "sonner";
+import { Toaster } from "~/components/ui/sonner";
 import { TooltipProvider } from "../components/ui/tooltip";
 
 const fontSans = Nunito({

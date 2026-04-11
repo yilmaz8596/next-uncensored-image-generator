@@ -1,7 +1,6 @@
 import { type Metadata } from "next";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { Toaster } from "~/components/ui/sonner";
 import {
   SidebarInset,
   SidebarProvider,
@@ -55,7 +54,6 @@ export default async function DashboardLayout({
           {children}
         </main>
       </SidebarInset>
-      <Toaster />
     </SidebarProvider>
   );
 }
