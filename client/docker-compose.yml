@@ -1,18 +1,41 @@
 services:
-   postgres: 
-    image: postgres:16.2 
-    container_name: img_gen_postgres 
-    environment: 
-        POSTGRES_USER: postgres 
-        POSTGRES_PASSWORD: admin
-        POSTGRES_DB: img_gen_db 
-    volumes: 
-        - img_gen_db_data:/var/lib/postgresql/data
-    ports: 
-        - "5432:5432"
-    restart: "unless-stopped"
+  postgres:
+    image: postgres:16.2
+    container_name: img_gen_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: img_gen_db
+    volumes:
+      - img_gen_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d img_gen_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: img_gen_app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://postgres:admin@postgres:5432/img_gen_db
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
-   img_gen_db_data:
+  img_gen_db_data:
+
 
 
