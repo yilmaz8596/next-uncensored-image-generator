@@ -1,6 +1,6 @@
 # SnapShot — Uncensored AI Image Generator
 
-A full-stack AI image generation platform powered by Stable Diffusion, built with Next.js 15, deployed on Railway, and backed by a Modal serverless GPU backend.
+A full-stack AI image generation platform powered by Stable Diffusion, built with Next.js 16, deployed on Railway, and backed by a Modal serverless GPU backend.
 
 Users get **10 free credits** on sign-up and can purchase more via Polar. Each image generation costs 1 credit and is stored permanently in S3.
 
