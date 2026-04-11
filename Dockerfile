@@ -17,6 +17,6 @@ RUN npm run build
 ENV NODE_ENV=production
 ENV HOSTNAME="0.0.0.0"
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD ["node", ".next/standalone/server.js"]
