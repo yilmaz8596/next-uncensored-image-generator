@@ -44,7 +44,7 @@ jobs:
           SKIP_ENV_VALIDATION: 1
 
       - name: Lint
-        run: npm run lint
+        run: npx next lint --dir src
         env:
           SKIP_ENV_VALIDATION: 1
 
