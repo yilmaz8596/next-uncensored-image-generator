@@ -23,4 +23,5 @@ ENV HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
 
-CMD ["node", ".next/standalone/server.js"]
+WORKDIR /app/.next/standalone
+CMD ["node", "server.js"]
