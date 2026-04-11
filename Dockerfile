@@ -15,9 +15,8 @@ ENV SKIP_ENV_VALIDATION=1
 RUN npm run build
 
 ENV NODE_ENV=production
-ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["node", ".next/standalone/server.js"]
