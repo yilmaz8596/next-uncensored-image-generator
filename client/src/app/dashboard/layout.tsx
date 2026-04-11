@@ -17,8 +17,8 @@ import BreadcrumbPageClient from "~/components/sidebar/breadcrumb-page-client";
 import { auth } from "~/lib/auth";
 
 export const metadata: Metadata = {
-  title: "AI Image Generator",
-  description: "AI Image Generator - Turn text prompts into images",
+  title: "SnapShot",
+  description: "SnapShot - Turn text prompts into images",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

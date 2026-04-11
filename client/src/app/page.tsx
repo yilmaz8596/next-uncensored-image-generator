@@ -101,7 +101,7 @@ export default function HomePage() {
                 <Sparkles className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="bg-linear-to-r from-chart-1 to-chart-2 bg-clip-text text-xl font-bold text-transparent">
-                AI Image Generator
+                SnapShot
               </span>
             </div>
 
@@ -330,7 +330,7 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              See what our users are saying about AI Image Generator
+              See what our users are saying about SnapShot
             </p>
           </FadeUp>
 
@@ -482,7 +482,7 @@ export default function HomePage() {
                     <Sparkles className="h-5 w-5 text-primary-foreground" />
                   </div>
                   <span className="bg-linear-to-r from-chart-1 to-chart-2 bg-clip-text text-xl font-bold text-transparent">
-                    AI Image Generator
+                    SnapShot
                   </span>
                 </div>
                 <p className="max-w-md text-muted-foreground">
@@ -546,7 +546,7 @@ export default function HomePage() {
             </div>
 
             <div className="mt-16 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-              <p>&copy; 2026 AI Image Generator. All rights reserved.</p>
+              <p>&copy; 2026 SnapShot. All rights reserved.</p>
             </div>
           </div>
         </div>
